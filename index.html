@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Andrew & Sofia | Wedding RSVP</title>
+
+<!-- Link preview card -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Andrew & Sofia | Wedding RSVP">
+<meta property="og:description" content="You're invited to our wedding — May 15, 2027, Tokyo.">
+<meta property="og:image" content="https://muroga-wedding.github.io/images/gate-envelope.jpg">
+<meta property="og:url" content="https://muroga-wedding.github.io">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Andrew & Sofia | Wedding RSVP">
+<meta name="twitter:description" content="You're invited to our wedding — May 15, 2027, Tokyo.">
+<meta name="twitter:image" content="https://muroga-wedding.github.io/images/gate-envelope.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F1EC;
+    --paper-deep:#EAE6DC;
+    --ink:#20232A;
+    --indigo:#28344E;
+    --indigo-deep:#1B2338;
+    --sage:#78876E;
+    --gold:#C9A96E;
+    --line:rgba(32,35,42,0.14);
+    --radius:2px;
+    --serif:'Noto Serif JP', serif;
+    --sans:'Noto Sans JP', sans-serif;
+    --maxw:880px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-weight:300;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:var(--serif);
+    font-weight:500;
+    letter-spacing:0.01em;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  /* ---------- Passcode Gate ---------- */
+  #gate{
+    position:fixed; inset:0; z-index:100;
+    display:flex; align-items:flex-end; justify-content:center;
+    background:#BED2C7;
+    color:var(--ink);
+    overflow:hidden;
+    transition:opacity 0.7s ease, visibility 0.7s ease;
+  }
+  #gate.hidden{opacity:0; visibility:hidden; pointer-events:none;}
+  #gate-video{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    background:#BED2C7;
+  }
+
+  .gate-box{
+    position:relative; z-index:2;
+    text-align:center; max-width:360px; width:100%;
+    margin:0 20px 9vh;
+    padding:34px 30px;
+    background:rgba(243,241,236,0.55);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    box-shadow:0 12px 40px rgba(20,26,42,0.18);
+    transition:opacity 0.4s ease;
+  }
+  .gate-box.dismiss{ opacity:0; pointer-events:none; }
+  .gate-box h1{ font-size:1.4rem; margin:0 0 8px; color:var(--indigo); opacity:0; animation:fade-up 0.8s ease forwards 0.3s; }
+  .gate-sub{ font-size:0.8rem; letter-spacing:0.06em; opacity:0; color:var(--ink); margin:0 0 26px; animation:fade-up 0.8s ease forwards 0.5s; }
+  @keyframes fade-up{ 0%{opacity:0; transform:translateY(8px);} 100%{opacity:1; transform:translateY(0);} }
+  .gate-form{ opacity:0; animation:fade-up 0.8s ease forwards 0.7s; display:flex; flex-direction:column; gap:14px; }
+  #passcode-input{ background:transparent; border:none; border-bottom:1px solid rgba(32,35,42,0.3); color:var(--ink); font-size:1rem; padding:10px 4px; text-align:center; letter-spacing:0.05em; outline:none; transition:border-color 0.3s ease; }
+  #passcode-input:focus{border-bottom-color:var(--indigo);}
+  #passcode-input::placeholder{color:rgba(32,35,42,0.4);}
+  #gate-submit{ background:none; border:1px solid var(--indigo); color:var(--indigo); padding:11px; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; transition:background 0.3s ease, color 0.3s ease; }
+  #gate-submit:hover{background:var(--indigo); color:var(--paper);}
+  #gate-error{ font-size:0.8rem; color:#B3473F; min-height:18px; opacity:0; transition:opacity 0.3s ease; }
+  #gate-error.show{opacity:1;}
+
+  /* ---------- Site ---------- */
+  #site{display:none;}
+  #site.visible{display:block;}
+
+  .lang-toggle{ position:fixed; top:20px; right:20px; z-index:20; display:flex; gap:2px; background:var(--paper); border:1px solid var(--line); }
+  .lang-toggle button{ background:none; border:none; padding:6px 12px; font-size:0.75rem; letter-spacing:0.05em; cursor:pointer; color:var(--ink); opacity:0.5; }
+  .lang-toggle button.active{opacity:1; font-weight:600; color:var(--indigo);}
+
+  /* Back to top */
+  .back-to-top{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:20;
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--paper);
+    border:1px solid var(--line);
+    color:var(--ink);
+    text-decoration:none;
+    font-size:1.1rem;
+    line-height:1;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .3s ease, visibility .3s ease, background .2s ease, color .2s ease;
+  }
+
+  .back-to-top.visible{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+
+  .back-to-top:hover{
+    background:var(--paper-deep);
+    color:var(--indigo);
+  }
+
+  /* Slightly smaller on mobile */
+  @media (max-width:600px){
+    .back-to-top{
+      right:20px;
+      bottom:20px;
+      width:40px;
+      height:40px;
+    }
+  }
+
+  section{padding:100px 24px; max-width:var(--maxw); margin:0 auto;}
+  .rule{width:1px; height:60px; background:var(--line); margin:0 auto;}
+
+  /* Hero — full-width image with gradient overlay */
+  #hero{
+    position:relative;
+    max-width:100%;
+    width:100%;
+    margin:0; padding:0;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    overflow:hidden;
+    background-image:url(images/hero-img.jpg);
+    background-size:cover;
+    background-position:center 25%;
+  }
+  .hero-overlay{
+    position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg, rgba(20,26,42,0.15) 0%, rgba(20,26,42,0.30) 45%, rgba(17,22,36,0.92) 100%);
+  }
+  .hero-content{
+    position:relative; z-index:2;
+    text-align:center;
+    color:var(--paper);
+    padding:40px 24px 90px;
+    max-width:720px;
+  }
+  .hero-eyebrow{ font-size:0.75rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
+  #hero h1{ font-size:clamp(2.4rem, 6vw, 4.2rem); margin:0 0 18px; color:var(--paper); }
+  .hero-date{ font-size:1rem; letter-spacing:0.1em; color:var(--paper); opacity:0.85; }
+  .hero-content .rule{ background:rgba(243,241,236,0.35); margin:32px auto; }
+  .hero-scroll{ margin-top:8px; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; opacity:0.55; }
+
+  .eyebrow{ font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--sage); margin-bottom:14px; display:block; }
+  h2.section-title{ font-size:clamp(1.6rem, 3vw, 2.2rem); color:var(--indigo); margin:0 0 40px; }
+
+  /* Message from us */
+  .message-grid{display:grid; grid-template-columns:1fr 1.1fr; gap:40px; align-items:center;}
+  .message-image .img-placeholder{aspect-ratio:4/5; margin-bottom:0;}
+  .message-text .section-title{margin-bottom:20px;}
+  .message-text p{font-size:1rem; opacity:0.85; margin:0; white-space:pre-line;}
+  @media (max-width:700px){ .message-grid{grid-template-columns:1fr; gap:32px;} }
+  /* A modest, fixed bleed past the section's left edge — not a full viewport-edge stretch */
+  @media (min-width:701px){
+    .message-image{
+      margin-left: -64px;
+      width: calc(100% + 64px);
+      max-width:none;
+    }
+  }
+
+  .schedule-intro{ font-size:0.95rem; opacity:0.8; max-width:640px; margin:-16px 0 40px; white-space:pre-line; }
+
+  /* Announcement banner */
+  .banner-outer{ max-width:var(--maxw); margin:0 auto; padding:0 24px; }
+  .announcement-banner{
+    background:var(--paper-deep);
+    padding:26px 30px; margin:0 0 20px;
+    display:flex; align-items:center; justify-content:space-between; gap:28px; flex-wrap:wrap;
+  }
+  .banner-text{ margin:0; font-size:0.92rem; color:var(--ink); opacity:0.85; max-width:560px; }
+  .banner-cta{
+    display:inline-block; font-size:0.85rem; font-weight:600; color:var(--indigo);
+    text-decoration:none; white-space:nowrap;
+    transition:opacity .2s ease;
+  }
+  .banner-cta:hover{opacity:0.65;}
+  @media (max-width:600px){ .announcement-banner{flex-direction:column; align-items:flex-start; padding:22px 24px;} }
+
+  /* Timeline */
+  .timeline{list-style:none; padding:0; margin:0; border-top:1px solid var(--line);}
+  .timeline li{ display:grid; grid-template-columns:64px 1fr; gap:24px; padding:28px 0; border-bottom:1px solid var(--line); }
+  .t-index{font-family:var(--serif); color:var(--gold); font-size:1.1rem;}
+  .t-time{font-size:0.8rem; letter-spacing:0.05em; color:var(--sage); margin-bottom:4px;}
+  .t-name{font-size:1.05rem; color:var(--indigo); margin:0 0 6px;}
+  .t-desc{font-size:0.92rem; opacity:0.75; margin:0;}
+  .t-image.img-placeholder{ aspect-ratio:1571/500; margin-top:18px; margin-bottom:0; }
+
+  /* Info cards (culture) */
+  .info-grid{display:grid; gap:32px;}
+  .info-card{ border-left:2px solid var(--gold); padding:4px 0 4px 22px; }
+  .info-card h3{font-size:1rem; color:var(--indigo); margin:0 0 8px;}
+  .info-card p{margin:0; font-size:0.92rem; opacity:0.8;}
+  .info-card a{color:var(--indigo); text-decoration:underline; text-underline-offset:3px;}
+
+  /* Venue */
+  .venue-intro{margin-bottom:48px;}
+  .venue-intro h3{font-size:1.05rem; color:var(--indigo); margin:0 0 10px;}
+  .venue-intro p{margin:0; font-size:0.95rem; opacity:0.85;}
+  .venue-intro a{color:var(--indigo); text-underline-offset:3px;}
+  .venue-access h3{font-size:1.05rem; color:var(--indigo); margin:0 0 14px;}
+  .address-block{font-size:0.92rem; opacity:0.85; margin:0 0 24px; line-height:1.9;}
+  .img-placeholder{
+    aspect-ratio:16/9; /* background:var(--paper-deep); border:1px dashed var(--line); */
+    display:flex; align-items:center; justify-content:center;
+    /* color:var(--ink); font-size:0.8rem; text-align:center; padding:20px; */
+    margin-bottom:24px;
+    position:relative; overflow:hidden;
+  }
+  .img-placeholder img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .bg-photo{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+  .btn-map{
+    display:inline-block; padding:12px 26px; border:1px solid var(--indigo); color:var(--indigo);
+    text-decoration:none; font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase;
+    transition:background .3s ease, color .3s ease;
+  }
+  .btn-map:hover{background:var(--indigo); color:var(--paper);}
+
+  /* Culture / gifting / dress code */
+  .culture-intro{font-size:0.95rem; opacity:0.8; margin:-16px 0 40px; max-width:640px;}
+  .payment-links{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;}
+  .payment-links a, .payment-links button{
+    appearance:none; -webkit-appearance:none; -moz-appearance:none;
+    padding:10px 20px; border:1px solid var(--line); background:none; background-color:transparent;
+    font-size:0.82rem; font-family:inherit; font-weight:300; line-height:inherit; letter-spacing:normal;
+    text-decoration:none; color:var(--indigo); cursor:pointer; box-shadow:none;
+  }
+  .payment-links a:hover, .payment-links button:hover{background:var(--paper-deep);}
+
+  /* Bank transfer modal */
+  .modal-overlay{ position:fixed; inset:0; background:rgba(20,26,42,0.72); z-index:200; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .modal-box{ background:var(--paper); max-width:400px; width:100%; padding:34px 30px; position:relative; border-radius:var(--radius); }
+  .modal-close{ position:absolute; top:14px; right:16px; background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--ink); opacity:0.5; line-height:1; padding:4px; }
+  .modal-close:hover{opacity:1;}
+  .modal-box h3{ margin:0 0 16px; color:var(--indigo); font-size:1.05rem; }
+  .modal-box p{ font-size:0.92rem; opacity:0.85; white-space:pre-line; margin:0 0 22px; line-height:1.8; }
+  .modal-copy{ background:var(--indigo); color:var(--paper); border:none; padding:11px 24px; font-size:0.8rem; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; }
+  .modal-copy:hover{background:var(--indigo-deep);}
+
+  /* Afterparty */
+  #afterparty{
+    position:relative; color:var(--paper); max-width:100%; text-align:center;
+    background-color:var(--indigo-deep);
+    background-image:url(images/techno.jpg);
+    background-size:cover; background-position:center;
+  }
+  .afterparty-overlay{
+    position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg, rgba(17,22,36,0.90) 0%, rgba(17,22,36,0.84) 45%, rgba(17,22,36,0.93) 100%);
+  }
+  #afterparty .inner{position:relative; z-index:2; max-width:var(--maxw); margin:0 auto; text-align:left;}
+  #afterparty .eyebrow-wrap{text-align:center;}
+  #afterparty h2{color:var(--paper); text-align:center;}
+  #afterparty .eyebrow{color:var(--gold); text-align:center;}
+  #afterparty > .inner > p{opacity:0.8; max-width:520px; margin:0 auto 8px; text-align:center;}
+  .lineup-title{ font-size:0.95rem; letter-spacing:0.05em; color:var(--gold); margin:56px 0 20px; text-align:center; }
+  .dj-grid{
+    display:grid; grid-template-columns:repeat(2, 1fr); gap:20px;
+    max-width:620px; margin:0 auto;
+  }
+  @media (min-width:640px){
+    .dj-grid{ grid-template-columns:repeat(3, 1fr); max-width:760px; gap:24px; }
+  }
+  .dj-grid .dj-slide{text-align:center;}
+  .dj-grid .img-placeholder{
+    aspect-ratio:1/1; background:rgba(243,241,236,0.08); border-color:rgba(243,241,236,0.3);
+    color:rgba(243,241,236,0.5); font-size:0.72rem; margin-bottom:10px;
+  }
+  .dj-grid .dj-name{font-size:0.82rem; color:var(--paper); opacity:0.85; margin:0;}
+  .afterparty-access{margin-top:56px; text-align:center;}
+  .afterparty-access h3{font-size:1rem; color:var(--paper); margin:0 0 10px;}
+  .afterparty-access p{opacity:0.75; font-size:0.9rem; max-width:480px; margin:0 auto 20px;}
+  #afterparty .btn-map{border-color:var(--gold); color:var(--gold);}
+  #afterparty .btn-map:hover{background:var(--gold); color:var(--indigo-deep);}
+
+  /* RSVP form */
+  #rsvp-form{display:flex; flex-direction:column; gap:22px; margin-top:8px;}
+  .field label{display:block; font-size:0.8rem; letter-spacing:0.04em; margin-bottom:8px; color:var(--indigo);}
+  .field input[type=text], .field input[type=number], .field textarea, .field select{
+    width:100%; background:var(--paper-deep); border:1px solid var(--line);
+    padding:12px 14px; font-family:inherit; font-size:0.95rem; color:var(--ink);
+    border-radius:var(--radius);
+  }
+  .field textarea{resize:vertical; min-height:90px;}
+  .radio-row{display:flex; gap:20px;}
+  .radio-row label{display:flex; align-items:center; gap:8px; font-size:0.9rem; color:var(--ink);}
+  #rsvp-submit{
+    align-self:flex-start; background:var(--indigo); color:var(--paper);
+    border:none; padding:14px 32px; font-size:0.85rem;
+    letter-spacing:0.1em; text-transform:uppercase; cursor:pointer;
+    transition:background 0.3s ease;
+  }
+  #rsvp-submit:hover{background:var(--indigo-deep);}
+  #rsvp-status{font-size:0.9rem; margin-top:4px;}
+
+  /* FAQ */
+  .faq-item{border-bottom:1px solid var(--line); padding:20px 0;}
+  .faq-item h3{font-size:0.98rem; color:var(--indigo); margin:0 0 8px;}
+  .faq-item p{margin:0; font-size:0.9rem; opacity:0.78;}
+  .faq-item .btn-map{margin-top:16px;}
+
+  footer{ text-align:center; padding:60px 24px 80px; font-size:0.78rem; opacity:0.5; letter-spacing:0.04em; }
+
+  @media (max-width: 600px){
+    section{padding:70px 20px;}
+    .timeline li{grid-template-columns:44px 1fr; gap:16px;}
+  }
+
+  [data-hide="true"]{display:none !important;}
+</style>
+</head>
+<body>
+
+<!-- ============ PASSCODE GATE ============ -->
+<div id="gate">
+  <video id="gate-video" poster="images/gate-envelope.jpg" muted playsinline preload="auto">
+    <source src="video/opening-animation.mp4" type="video/mp4">
+  </video>
+  <div class="gate-box" id="gate-box">
+    <p class="gate-sub" id="gate-subtitle">ENTER YOUR INVITATION CODE<br>招待コードを入力してください</p>
+    <div class="gate-form">
+      <input type="text" id="passcode-input" placeholder="passcode・招待コード" autocomplete="off">
+      <button id="gate-submit">Open・開く</button>
+      <div id="gate-error"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SITE ============ -->
+<div id="site">
+  <div class="lang-toggle" id="lang-toggle" data-hide="true">
+    <button id="lang-en" class="active">EN</button>
+    <button id="lang-jp">日本語</button>
+  </div>
+
+  <a href="#hero"
+    class="back-to-top"
+    id="back-to-top"
+    aria-label="Back to top"
+    title="Back to top">
+    ↑
+  </a>
+
+  <section id="hero">
+    <img class="bg-photo" src="images/hero.jpg" alt="" onerror="this.remove()">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow" data-key="hero.eyebrow"></div>
+      <h1 data-key="hero.names"></h1>
+      <div class="hero-date" data-key="hero.date"></div>
+      <div class="rule"></div>
+      <div class="hero-scroll" data-key="hero.scroll"></div>
+    </div>
+  </section>
+
+  <section id="message">
+    <div class="message-grid">
+      <div class="message-image">
+        <div class="img-placeholder">[Photo of Andrew & Sofia]<img src="images/personal-img.png" alt="Andrew & Sofia" onerror="this.remove()"></div>
+      </div>
+      <div class="message-text">
+        <span class="eyebrow" data-key="message.eyebrow"></span>
+        <h2 class="section-title" data-key="message.title"></h2>
+        <p data-key="message.text"></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="banner-outer">
+    <div class="announcement-banner">
+      <p class="banner-text" data-key="banner.text"></p>
+      <a href="#rsvp" class="banner-cta" data-key="banner.cta"></a>
+    </div>
+  </div>
+
+  <section id="schedule">
+    <span class="eyebrow" data-key="schedule.eyebrow"></span>
+    <h2 class="section-title" data-key="schedule.title"></h2>
+    <p class="schedule-intro" data-key="schedule.intro"></p>
+    <ul class="timeline" id="timeline-list"></ul>
+  </section>
+
+  <section id="venue">
+    <span class="eyebrow" data-key="venue.eyebrow"></span>
+    <h2 class="section-title" data-key="venue.title"></h2>
+    <div id="venue-content"></div>
+  </section>
+
+  <section id="culture" data-hide="true">
+    <span class="eyebrow" data-key="culture.eyebrow"></span>
+    <h2 class="section-title" data-key="culture.title"></h2>
+    <div id="culture-content"></div>
+  </section>
+
+  <section id="afterparty" data-hide="true">
+    <img class="bg-photo" src="images/afterparty-bg.jpg" alt="" onerror="this.remove()">
+    <div class="afterparty-overlay"></div>
+    <div class="inner">
+      <div class="eyebrow-wrap"><span class="eyebrow" data-key="afterparty.eyebrow"></span></div>
+      <h2 class="section-title" data-key="afterparty.title"></h2>
+      <p data-key="afterparty.desc"></p>
+      <p data-key="afterparty.details"></p>
+      <p data-key="afterparty.lineupText"></p>
+      <div class="lineup-title" data-key="afterparty.lineupTitle"></div>
+      <div class="dj-grid" id="dj-grid"></div>
+
+      <div class="afterparty-access" id="afterparty-access"></div>
+    </div>
+  </section>
+
+  <section id="rsvp">
+    <span class="eyebrow" data-key="rsvp.eyebrow"></span>
+    <h2 class="section-title" data-key="rsvp.title"></h2>
+    <form id="rsvp-form">
+      <div class="field">
+        <label data-key="rsvp.nameLabel"></label>
+        <input type="text" id="f-name" required>
+      </div>
+      <div class="field">
+        <label data-key="rsvp.attendingLabel"></label>
+        <div class="radio-row">
+          <label><input type="radio" name="attending" value="yes" required> <span data-key="rsvp.yes"></span></label>
+          <label><input type="radio" name="attending" value="no"> <span data-key="rsvp.no"></span></label>
+        </div>
+      </div>
+      <div class="field" id="afterparty-attend-field" data-hide="true">
+        <label data-key="rsvp.afterpartyLabel"></label>
+        <div class="radio-row">
+          <label><input type="radio" name="afterpartyAttending" value="yes"> <span data-key="rsvp.yes"></span></label>
+          <label><input type="radio" name="afterpartyAttending" value="no"> <span data-key="rsvp.no"></span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label data-key="rsvp.dietaryLabel"></label>
+        <input type="text" id="f-dietary">
+      </div>
+      <div class="field">
+        <label data-key="rsvp.messageLabel"></label>
+        <textarea id="f-message"></textarea>
+      </div>
+      <button type="submit" id="rsvp-submit" data-key="rsvp.submit"></button>
+      <div id="rsvp-status"></div>
+    </form>
+  </section>
+
+  <section id="faq" data-hide="true">
+    <span class="eyebrow" data-key="faq.eyebrow"></span>
+    <h2 class="section-title" data-key="faq.title"></h2>
+    <div id="faq-list"></div>
+  </section>
+
+  <footer data-key="footer.note"></footer>
+
+  <div class="modal-overlay" id="bank-modal" data-hide="true">
+    <div class="modal-box">
+      <button class="modal-close" id="bank-modal-close" aria-label="Close">&times;</button>
+      <h3 id="bank-modal-title"></h3>
+      <p id="bank-modal-text"></p>
+      <button class="modal-copy" id="bank-modal-copy"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   LINKS & CONSTANTS — edit these once, they're reused throughout the site.
+   ========================================================================= */
+const VENUE_SITE_URL = "https://www.bridal-produce.co.jp/bridal/tokyo/togokinenkan/guest/";
+const VENUE_MAP_URL = "https://maps.app.goo.gl/DRh8mJ3q1pMjXLvA6?_gl=1*weadrt*_gcl_au*NDg4NjAzNjg0LjE3ODQ5MDI5NzQ.";
+const AFTERPARTY_MAP_URL = "https://maps.app.goo.gl/CXLbnPVY9G454c476";
+const JAPAN_DEV_GUIDE_URL = "https://japan-dev.com/blog/japanese-wedding-attire";
+const PAYPAL_URL = "http://paypal.me/yumuroga";
+const REVOLUT_URL = "https://revolut.me/yuhzqtf";
+const WISE_URL = "https://wise.com/pay/me/yum55";
+const HOTEL_URL = "https://app.notion.com/p/Special-Hotel-Rates-3e737ad0a37a80f3bc9ad161115fea93?source=copy_link";
+
+
+/* =========================================================================
+   CONTENT
+   ========================================================================= */
+const CONTENT = {
+  en: {
+    hero: { eyebrow:"The Wedding Of", names:"Andrew & Sofia", date:"May 15, 2027 · Tokyo, Japan", scroll:"Scroll" },
+    message: {
+      title:"A Note From Us",
+      text:"We're very happy to invite you to our wedding.\nThank you for all the love and support you've given us along the way. It would mean so much to celebrate this day together, and we hope to see you there.\n\nWith love,\nAndrew & Sofia"
+    },
+    banner: {
+      text:"Please RSVP by 25th of December",
+      cta:"RSVP Now ↓"
+    },
+    schedule: {
+      title:"Wedding Schedule",
+      intro:"Our wedding will take place at Togo Kinenkan, a venue blending traditional Japanese style with a modern touch, tucked away in the heart of Harajuku.\n\nPlease arrive by the time listed below. From there, you'll be guided through the day.",
+      items:[
+        {time:"12:00", name:"Arrival", desc:"At Togo Kinenkan.<br>Relatives: please arrive by 11:40.<br>All other guests: please arrive by 12:00.", image:"images/schedule-image-01.jpg"},
+        {time:"12:20 – 12:40", name:"Ceremony", desc:"The wedding ceremony will be held at the Garden.", image:"images/schedule-image-02.jpg"},
+        {time:"12:40 – 13:30", name:"Photos, Welcome Tea & Changing", desc:"Following the ceremony, we will join at the Tenshou Balcony for welcome tea and mingle.", image:"images/schedule-image-03.jpg"},
+        {time:"13:30 – 16:00", name:"Reception", desc:"The reception includes a seated course at Juko.", image:"images/schedule-image-04.jpg"},
+        {time:"16:00 – 18:00", name:"Break", desc:"Enjoy a stroll through the Japanese garden or some free time in the area, then make your way to the afterparty venue for a 18:00 start. It's about a 15-minute walk away.", image:"images/schedule-image-05.jpg", hideForFamily:true},
+        {time:"18:00 – 21:00", name:"Afterparty", desc:"For the afterparty, we will change venue and continue the party at VENT.", image:"images/schedule-image-06.jpg", hideForFamily:true}
+      ]
+    },
+    venue: {
+      title:"Venue & Access",
+      venueName:"Togo Kinenkan (東郷記念館), The Garden",
+      venueNote:"Our ceremony and reception will be held at The Garden, Togo Kinenkan.",
+      siteLabel:"View the official guest information page",
+      accessTitle:"Access",
+      addressLines:[
+        "1-5-3 Jingumae, Shibuya-ku, Tokyo 150-0001",
+        "Harajuku Station: 3 min walk from the Takeshita Exit (JR Yamanote Line)",
+        "Meiji-jingumae Station: 3 min walk from Exit 5 (Chiyoda Line / Fukutoshin Line)"
+      ],
+      mapLabel:"Open in Google Maps"
+    },
+    culture: {
+      eyebrow:"For Our Guests From Abroad", title:"Important to Note",
+      introText:"Ours will be a Western-style wedding rather than a traditional Japanese ceremony. For more information, this guide covers attire and etiquette well:",
+      guideLinkLabel:"A Guide to Japanese Wedding Attire →",
+      giftTitle:"Regarding Gift-Giving (Goshugi)",
+      giftText:"In Japan, wedding guests traditionally give a monetary gift called goshugi, presented in a decorated envelope at the ceremony.<br>If you'd like to contribute as we start our married life together, we'd be very grateful for a monetary gift, in keeping with Japanese tradition.<br><br>To make things easier, we've included a few digital options below.",
+      paypalLabel:"PayPal", revolutLabel:"Revolut", wiseLabel:"Wise",
+      bankButtonLabel:"Bank Transfer",
+      bankModalTitle:"International Bank Transfer Details",
+      bankText:"Account/Beneficiary Name: YU MUROGA\nIBAN/Account number: 155-0042042\nSWIFT/BIC: BOTKJPJT\nBank name: MUFG Bank, Ltd.\n\nIf a 11-character SWIFT code is required: BOTKJPJTXXX",
+      bankCopyLabel:"Copy details", bankCopiedLabel:"Copied!", bankModalClose:"Close",
+      dressTitle:"Regarding the Dress Code",
+      dressText:"Japanese wedding culture tends to run a little more conservative than what you might be used to, especially at the ceremony itself. The guide linked above goes into more detail if you'd like to plan your outfit ahead of time."
+    },
+    afterparty: {
+      title:"Afterparty",
+      desc:"Our afterparty will be at VENT, one of our favourite clubs in Tokyo.",
+      details:"A special lineup of DJs will take us through the evening.",
+      lineupTitle:"Lineup",
+      lineupText:"See you on the dance floor",
+      lineup:[
+        {act:"Doors Open · Auto Play"},
+        {act:"Andrew", photo:"images/dj-andrew.jpg"},
+        {act:"Kumaoverdose", photo:"images/dj-kuma.jpg"},
+        {act:"rikcurl", photo:"images/dj-ricc.jpg"},
+        {act:"Dewei Song", photo:"images/dj-dewei.jpg"},
+        {act:"Gene", photo:"images/dj-gene.jpg"},
+        {act:"Bassline Brat", photo:"images/dj-rosie.jpg"}
+      ],
+      accessTitle:"Getting to VENT",
+      accessText:"VENT is within walking distance of Togo Kinenkan — we'll point you in the right direction after the reception.",
+      mapLabel:"Open in Google Maps"
+    },
+    rsvp: {
+      eyebrow:"Please Respond Below By 25th of December", title:"RSVP",
+      nameLabel:"Your full name", attendingLabel:"Will you attend the ceremony and reception at Togo Kinenkan?",
+      afterpartyLabel:"Will you join the afterparty at VENT?",
+      yes:"Yes", no:"No",
+      dietaryLabel:"Food allergies or dietary requirements (optional)",
+      messageLabel:"Message for us (optional)",
+      submit:"Send RSVP"
+    },
+    faq: {
+      title:"FAQ",
+      items:[
+        {q:"What's the dress code?", a:"The dress code is semi-formal."},
+        {q:"Can I bring a plus-one?", a:"Due to limited seating, we can only accommodate guests named on the invitation. If you're unsure, please get in touch with us."},
+        {q:"Can I leave my luggage at the venues?", a:"Yes, at both the ceremony and afterparty venue. The afterparty venue uses coin-operated lockers, so please bring Japanese yen coins."},
+        {q:"Is there a dressing room?", a:"Yes, please inquire at the reception at Togo Kinenkan."},
+        {q:"Where should I stay?", a:"We recommend staying around Shibuya, Harajuku or Shinjuku, these areas are convenient for the wedding and the plans we have around it.<br>We've arranged special rates at selected hotels in Tokyo and across Japan, available throughout your stay in Japan — not just for the wedding date. Please have a look below.<br>You may also find good deals on Booking.com or Agoda, so it's worth comparing options.", buttonLabel:"See hotel options with special rates", buttonUrl:HOTEL_URL},
+        {q:"Is there parking?", a:"Neither venues have dedicated parking. If you need information regarding nearby parking options, feel free to contact us."},
+        {q:"Who do I contact with questions?", a:"Please reach out to us at <b>muroga.wedding@gmail.com</b> for any wedding-related questions."}
+      ]
+    },
+    footer: { note:"Andrew & Sofia · May 15, 2027 · Made with love" }
+  },
+  jp: {
+    hero: { eyebrow:"結婚式のご案内", names:"悠 & ソフィア", date:"2027年5月15日 · 東京, 日本", scroll:"スクロール" },
+    message: {
+      title:"ご挨拶",
+      text:"このたび、私たちは結婚式を挙げることとなりました\n\nこれまでお世話になった皆さまへ感謝を込めて、ささやかではありますが、結婚式と披露宴を開きます\n\n当日は皆さまと一緒に、楽しい時間を過ごせたら嬉しいです。お会いできることを楽しみにしています\n\n悠（アンデレ） & ソフィア"
+    },
+    banner: {
+      text:"12月25日までに出欠のご回答をお願いします",
+      cta:"今すぐ回答する ↓"
+    },
+    schedule: {
+      title:"当日のスケジュール",
+      intro:"私たちの結婚式は、伝統的な和の趣とモダンな雰囲気が調和する東郷記念館で行います。\n\n当日は下記の時間までに会場へお越しください。",
+      items:[
+        {time:"12:00", name:"ご来館", desc:"東郷記念館<br>ご親族は11:40までにお越しください<br>ご親族以外の皆さまは12:00までにお越しください", image:"images/schedule-image-01.jpg"},
+        {time:"12:20〜12:40", name:"挙式", desc:"東郷記念館・結びの庭", image:"images/schedule-image-02.jpg"},
+        {time:"12:40〜13:30", name:"写真撮影・ウェルカムティー", desc:"東郷記念館・天翔バルコニー", image:"images/schedule-image-03.jpg"},
+        {time:"13:30〜16:00", name:"披露宴", desc:"東郷記念館・聚洸", image:"images/schedule-image-04.jpg"},
+        {time:"16:00〜18:00", name:"休憩時間", desc:"日本庭園の散策など、周辺でご自由にお過ごしいただき、18:00の開始に合わせてアフターパーティー会場へお向かいください。会場までは徒歩約15分です。", image:"images/schedule-image-05.jpg", hideForFamily:true},
+        {time:"18:00〜21:00", name:"アフターパーティー", desc:"VENT Tokyo", image:"images/schedule-image-06.jpg", hideForFamily:true}
+      ]
+    },
+    venue: {
+      title:"会場・交通のご案内",
+      venueName:"東郷記念館 The Garden",
+      venueNote:"挙式・披露宴は東郷記念館 The Gardenにて行います",
+      siteLabel:"公式のご案内サイトはこちら",
+      accessTitle:"アクセス",
+      addressLines:[
+        "〒150-0001　東京都渋谷区神宮前1−5−3",
+        "原宿駅／JR山手線原宿駅竹下口より徒歩3分",
+        "地下鉄千代田線・副都心線 明治神宮前駅5番出口より徒歩3分"
+      ],
+      mapLabel:"Googleマップで場所を見る"
+    },
+    culture: { eyebrow:"", title:"", introText:"", guideLinkLabel:"", giftTitle:"", giftText:"", paypalLabel:"", revolutLabel:"", bankLabel:"", bankText:"", paymentNote:"", dressTitle:"", dressText:"" },
+    afterparty: {
+      title:"アフターパーティー",
+      desc:"披露宴のあとは、VENTにて\nアフターパーティーを開催します",
+      details:"この日のためにセレクトしたDJラインナップが、夜までフロアをつなぎます",
+      lineupText:"See you on the dance floor",
+      lineupTitle:"ラインナップ",
+      lineup:[
+        {act:"入場開始・Auto Play"},
+        {act:"Andrew", photo:"images/dj-andrew.jpg"},
+        {act:"Kumaoverdose", photo:"images/dj-kuma.jpg"},
+        {act:"rikcurl", photo:"images/dj-ricc.jpg"},
+        {act:"Dewei Song", photo:"images/dj-dewei.jpg"},
+        {act:"Gene", photo:"images/dj-gene.jpg"},
+        {act:"Bassline Brat", photo:"images/dj-rosie.jpg"}
+      ],
+      accessTitle:"VENTへのアクセス",
+      accessText:"VENTは東郷記念館から徒歩圏内です<br>会場へのアクセスは、披露宴終了後にご案内します",
+      mapLabel:"Googleマップで場所を見る"
+    },
+    rsvp: {
+      eyebrow:"12月25日までにご回答をお願いします", title:"ご出欠について",
+      nameLabel:"お名前（ローマ字のフルネーム）", attendingLabel:"挙式・披露宴に出席しますか？",
+      afterpartyLabel:"アフターパーティーに出席しますか？",
+      yes:"出席します", no:"欠席します",
+      dietaryLabel:"食物アレルギー・食事制限（任意）",
+      messageLabel:"私たちへのメッセージ（任意）",
+      submit:"回答を送信"
+    },
+    faq: {
+      title:"よくあるご質問",
+      items:[
+        {q:"ドレスコードはありますか？", a:"スーツやドレスなどのセミフォーマルな服装でお越しください"},
+        {q:"同伴者を連れて行ってもよいですか？", a:"会場の席数の都合上、招待状をお送りした方のみご参加いただけます<br>同伴について相談したいことがあれば、私たちまでご連絡ください"},
+        {q:"荷物を預けることはできますか？", a:"挙式会場・アフターパーティー会場ともに可能です。アフターパーティー会場はコインロッカー形式のため、小銭をご用意ください"},
+        {q:"着替えをする場所はありますか？", a:"可能です。受付にて直接ご確認ください"},
+        {q:"どこに泊まるのがおすすめですか？", a:"渋谷・原宿・新宿周辺をおすすめします。会場へのアクセスがよく、滞在中の予定にも動きやすいエリアです。<br>また、東京・日本各地の一部ホテルで特別料金をご用意しています。<br>Booking.comやAgodaの方が安い場合もあるので、あわせて比較してみてください。", buttonLabel:"ホテル一覧・特別料金を見る", buttonUrl:HOTEL_URL},
+        {q:"駐車場はありますか？", a:"会場専用の駐車場はございません。必要であれば近隣の駐車場をご案内いたしますので、お気軽にお問い合わせください"},
+        {q:"問い合わせ先を教えてください", a:"ご質問は以下メールアドレスまでご連絡ください<br><b>muroga.wedding@gmail.com</b>"}
+      ]
+    },
+    footer: { note:"悠 & ソフィア · 2027年5月15日 · Made with love" }
+  }
+};
+
+/* =========================================================================
+   GROUP CONFIG — the passcodes that gate the site.
+   ========================================================================= */
+const GROUPS = {
+  "il4681": { lang:"en", lockLanguage:true,  showCulture:true,  showAfterparty:true, showFaq:true },
+  "fy7023":        { lang:"jp", lockLanguage:true,  showCulture:false, showAfterparty:false, showFaq:false },
+  "rt9345":     { lang:"en", lockLanguage:false, showCulture:false, showAfterparty:true, showFaq:true }
+};
+
+// >>> Paste your deployed Google Apps Script Web App URL here <<<
+const RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbz9l69-WPNc9J3oPJCoy6G9z-0zx4dHgav_UkeHgu4mtqBUVp0dFglKsjS3QfrgWFFK/exec";
+
+let state = { group:null, lang:"en" };
+
+/* ---------- Gate logic ---------- */
+const gate = document.getElementById('gate');
+const site = document.getElementById('site');
+const input = document.getElementById('passcode-input');
+const errorEl = document.getElementById('gate-error');
+
+const gateVideo = document.getElementById('gate-video');
+const gateBox = document.getElementById('gate-box');
+
+function revealSite(){
+  gate.classList.add('hidden');
+  site.classList.add('visible');
+}
+
+function unlock(passcode, opts = {}){
+  const key = passcode.trim().toLowerCase();
+  const cfg = GROUPS[key];
+  if(!cfg){
+    errorEl.textContent = "That code doesn't match an invitation. Please check and try again.　招待コードが確認できませんでした。入力内容をご確認のうえ、もう一度お試しください。";
+    errorEl.classList.add('show');
+    return;
+  }
+  state.group = key;
+  state.lang = cfg.lang;
+  sessionStorage.setItem('wedding-group', key);
+
+  document.getElementById('faq').dataset.hide = cfg.showFaq ? "false" : "true";
+  document.getElementById('afterparty').dataset.hide = cfg.showAfterparty ? "false" : "true";
+  document.getElementById('culture').dataset.hide = cfg.showCulture ? "false" : "true";
+  document.getElementById('afterparty-attend-field').dataset.hide = cfg.showAfterparty ? "false" : "true";
+  document.getElementById('lang-toggle').dataset.hide = cfg.lockLanguage ? "true" : "false";
+
+  render();
+
+  if(opts.instant){
+    revealSite();
+    return;
+  }
+
+  // Play the envelope-opening video, then reveal the site once it finishes.
+  // The poster image is the video's own first frame, so starting playback is seamless.
+  gateBox.classList.add('dismiss');
+  let revealed = false;
+  let fallbackTimer;
+  const doReveal = () => {
+    if(revealed) return;
+    revealed = true;
+    clearTimeout(fallbackTimer);
+    revealSite();
+  };
+  gateVideo.addEventListener('ended', doReveal, { once:true });
+  // Safety net: if the video can't play for any reason (format, autoplay block, slow network),
+  // never leave a guest stuck on the gate.
+  fallbackTimer = setTimeout(doReveal, 4000);
+  const playPromise = gateVideo.play();
+  if(playPromise && typeof playPromise.catch === 'function'){
+    playPromise.catch(() => { clearTimeout(fallbackTimer); doReveal(); });
+  }
+}
+
+document.getElementById('gate-submit').addEventListener('click', () => unlock(input.value));
+input.addEventListener('keydown', (e) => { if(e.key === 'Enter') unlock(input.value); });
+
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = sessionStorage.getItem('wedding-group');
+  if(saved && GROUPS[saved]){ unlock(saved, { instant:true }); }
+});
+
+/* ---------- Language toggle ---------- */
+document.getElementById('lang-en').addEventListener('click', () => setLang('en'));
+document.getElementById('lang-jp').addEventListener('click', () => setLang('jp'));
+function setLang(l){
+  state.lang = l;
+  document.getElementById('lang-en').classList.toggle('active', l==='en');
+  document.getElementById('lang-jp').classList.toggle('active', l==='jp');
+  document.documentElement.lang = l;
+  render();
+}
+
+/* ---------- Render content into DOM ---------- */
+function get(obj, path){ return path.split('.').reduce((o,k)=> (o||{})[k], obj); }
+
+function render(){
+  const c = CONTENT[state.lang];
+  const cfg = GROUPS[state.group] || { showAfterparty:true };
+
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const val = get(c, el.dataset.key);
+    if(typeof val === 'string') el.textContent = val;
+  });
+
+  // timeline
+  const tl = document.getElementById('timeline-list');
+  tl.innerHTML = '';
+  c.schedule.items.forEach((item, i) => {
+    if(item.hideForFamily && !cfg.showAfterparty) return;
+    const li = document.createElement('li');
+    const imageBlock = item.image
+      ? `<div class="t-image img-placeholder">[${item.name} photo]<img src="${item.image}" alt="${item.name}" onerror="this.remove()"></div>`
+      : '';
+    li.innerHTML = `<div class="t-index">0${i+1}</div>
+      <div><div class="t-time">${item.time}</div><h3 class="t-name">${item.name}</h3><p class="t-desc">${item.desc}</p>${imageBlock}</div>`;
+    tl.appendChild(li);
+  });
+
+  // venue
+  const vc = document.getElementById('venue-content');
+  vc.innerHTML = `
+    <div class="venue-intro">
+      <h3>${c.venue.venueName}</h3>
+      <p>${c.venue.venueNote}</p>
+      <br>
+      <a class="btn-map" href="${VENUE_SITE_URL}" target="_blank" rel="noopener">${c.venue.siteLabel}</a>
+    </div>
+    <div class="venue-access">
+      <h3>${c.venue.accessTitle}</h3>
+      <p class="address-block">${c.venue.addressLines.join('<br>')}</p>
+      <div class="img-placeholder">[Directions image — add a map or photo of the entrance]<img src="images/map-image.svg" alt="Directions to Togo Kinenkan" onerror="this.remove()"></div>
+      <a class="btn-map" href="${VENUE_MAP_URL}" target="_blank" rel="noopener">${c.venue.mapLabel}</a>
+    </div>`;
+
+  // culture (international only)
+  if(cfg.showCulture){
+    const cc = document.getElementById('culture-content');
+    cc.innerHTML = `
+      <p class="culture-intro">${c.culture.introText} <a href="${JAPAN_DEV_GUIDE_URL}" target="_blank" rel="noopener">${c.culture.guideLinkLabel}</a></p>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>${c.culture.giftTitle}</h3>
+          <p>${c.culture.giftText}</p>
+          <div class="payment-links">
+            <a href="${PAYPAL_URL}" target="_blank" rel="noopener">${c.culture.paypalLabel}</a>
+            <a href="${REVOLUT_URL}" target="_blank" rel="noopener">${c.culture.revolutLabel}</a>
+            <a href="${WISE_URL}" target="_blank" rel="noopener">${c.culture.wiseLabel}</a>
+            <button type="button" id="bank-transfer-btn">${c.culture.bankButtonLabel}</button>
+          </div>
+        </div>
+        <div class="info-card">
+          <h3>${c.culture.dressTitle}</h3>
+          <p>${c.culture.dressText}</p>
+        </div>
+      </div>`;
+  }
+
+  // afterparty — lineup header + 6-image square grid + access (international + residents)
+  if(cfg.showAfterparty){
+    const grid = document.getElementById('dj-grid');
+    grid.innerHTML = '';
+    c.afterparty.lineup.slice(1).forEach(dj => {
+      grid.innerHTML += `<div class="dj-slide">
+        <div class="img-placeholder">[${dj.act} photo]<img src="${dj.photo}" alt="${dj.act}" onerror="this.remove()"></div>
+        <p class="dj-name">${dj.act}</p>
+      </div>`;
+    });
+
+    const aa = document.getElementById('afterparty-access');
+    aa.innerHTML = `
+      <h3>${c.afterparty.accessTitle}</h3>
+      <p>${c.afterparty.accessText}</p>
+      <a class="btn-map" href="${AFTERPARTY_MAP_URL}" target="_blank" rel="noopener">${c.afterparty.mapLabel}</a>`;
+  }
+
+  // faq
+  const fl = document.getElementById('faq-list');
+  fl.innerHTML = '';
+  c.faq.items.forEach(item => {
+    const btn = item.buttonLabel
+      ? `<a class="btn-map" href="${item.buttonUrl}" target="_blank" rel="noopener">${item.buttonLabel}</a>`
+      : '';
+    fl.innerHTML += `<div class="faq-item"><h3>${item.q}</h3><p>${item.a}</p>${btn}</div>`;
+  });
+}
+
+/* ---------- Bank transfer modal ---------- */
+function openBankModal(){
+  const c = CONTENT[state.lang].culture;
+  document.getElementById('bank-modal-title').textContent = c.bankModalTitle;
+  document.getElementById('bank-modal-text').textContent = c.bankText;
+  document.getElementById('bank-modal-copy').textContent = c.bankCopyLabel;
+  document.getElementById('bank-modal').dataset.hide = 'false';
+}
+function closeBankModal(){
+  document.getElementById('bank-modal').dataset.hide = 'true';
+}
+// event delegation, since the bank-transfer button is generated dynamically inside culture-content
+document.addEventListener('click', (e) => {
+  if(e.target.closest('#bank-transfer-btn')){ openBankModal(); }
+});
+document.getElementById('bank-modal-close').addEventListener('click', closeBankModal);
+document.getElementById('bank-modal').addEventListener('click', (e) => {
+  if(e.target.id === 'bank-modal') closeBankModal();
+});
+document.getElementById('bank-modal-copy').addEventListener('click', async () => {
+  const c = CONTENT[state.lang].culture;
+  const btn = document.getElementById('bank-modal-copy');
+  try {
+    await navigator.clipboard.writeText(c.bankText);
+    btn.textContent = c.bankCopiedLabel;
+    setTimeout(() => { btn.textContent = c.bankCopyLabel; }, 1800);
+  } catch(err){
+    console.error('Clipboard write failed:', err);
+  }
+});
+
+/* ---------- RSVP submit ---------- */
+document.getElementById('rsvp-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const statusEl = document.getElementById('rsvp-status');
+  const attending = document.querySelector('input[name=attending]:checked')?.value;
+  const afterpartyAttending = document.querySelector('input[name=afterpartyAttending]:checked')?.value || 'n/a';
+
+  const payload = {
+    name: document.getElementById('f-name').value,
+    group: state.group,
+    language: state.lang,
+    attending: attending,
+    afterpartyAttending: afterpartyAttending,
+    dietary: document.getElementById('f-dietary').value,
+    message: document.getElementById('f-message').value,
+  };
+
+  if(RSVP_ENDPOINT.includes('PASTE_YOUR')){
+    statusEl.textContent = state.lang === 'jp'
+      ? '（開発中）Google Apps ScriptのURLをまだ設定していません。'
+      : '(Dev mode) Set your Google Apps Script URL in the code to enable real submissions.';
+    console.log('RSVP payload (not sent):', payload);
+    return;
+  }
+
+  statusEl.textContent = state.lang === 'jp' ? '送信中...' : 'Sending...';
+  try {
+    await fetch(RSVP_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    statusEl.textContent = state.lang === 'jp' ? 'ありがとうございます。送信しました。' : 'Thank you — your RSVP has been sent.';
+    e.target.reset();
+  } catch(err){
+    statusEl.textContent = state.lang === 'jp' ? 'エラーが発生しました。もう一度お試しください。' : 'Something went wrong. Please try again.';
+    console.error(err);
+  }
+});
+
+/* ---------- Back to top ---------- */
+const backToTop = document.getElementById('back-to-top');
+const hero = document.getElementById('hero');
+
+const backToTopObserver = new IntersectionObserver(
+  ([entry]) => {
+    backToTop.classList.toggle('visible', !entry.isIntersecting);
+  },
+  { threshold: 0 }
+);
+
+backToTopObserver.observe(hero);
+
+</script>
+</body>
+</html>
