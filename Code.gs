@@ -1,22 +1,5 @@
 /**
  * WEDDING RSVP — Google Apps Script backend
- *
- * SETUP:
- * 1. Go to https://sheets.google.com and create a new blank spreadsheet.
- *    Name it something like "Wedding RSVPs".
- * 2. In that sheet: Extensions > Apps Script.
- * 3. Delete any starter code and paste this entire file in.
- * 4. Click Deploy > New deployment.
- *    - Type: "Web app"
- *    - Execute as: "Me"
- *    - Who has access: "Anyone"
- * 5. Click Deploy, authorize the permissions when prompted.
- * 6. Copy the Web App URL it gives you.
- * 7. Paste that URL into index.html where it says
- *    const RSVP_ENDPOINT = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
- *
- * Every RSVP submission will appear as a new row in a sheet tab called "RSVPs"
- * (created automatically the first time someone submits).
  */
 
 function doPost(e) {
