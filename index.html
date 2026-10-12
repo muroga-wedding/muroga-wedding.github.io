@@ -526,7 +526,7 @@ const CONTENT = {
     hero: { eyebrow:"The Wedding Of", names:"Andrew & Sofia", date:"May 15, 2027 · Tokyo, Japan", scroll:"Scroll" },
     message: {
       title:"A Note From Us",
-      text:"We're very happy to invite you to our wedding.\nThank you for all the love and support you've given us along the way. It would mean so much to celebrate this day together, and we hope to see you there.\n\nWith love,\nAndrew & Sofia"
+      text:"We're very happy to invite you to our wedding.\nThank you for all the love and support you've given us along the way.\nIt would mean so much to celebrate this day together, and we hope to see you there.\n\nWith love,\nAndrew & Sofia"
     },
     banner: {
       text:"Please RSVP by 25th of December",
@@ -603,10 +603,9 @@ const CONTENT = {
       title:"FAQ",
       items:[
         {q:"What's the dress code?", a:"The dress code is semi-formal."},
-        {q:"Can I bring a plus-one?", a:"Due to limited seating, we can only accommodate guests named on the invitation. If you're unsure, please get in touch with us."},
+        {q:"Can I bring a plus-one?", a:"Due to limited seating, we can only accommodate guests named on the invitation for the ceremony and reception.<br>However, you may bring a plus-one to the afterparty at VENT. If so, please let us know in advance."},
         {q:"Can I leave my luggage at the venues?", a:"Yes, at both the ceremony and afterparty venue. The afterparty venue uses coin-operated lockers, so please bring Japanese yen coins."},
-        {q:"Is there a dressing room?", a:"Yes, please inquire at the reception at Togo Kinenkan."},
-        {q:"Where should I stay?", a:"We recommend staying around Shibuya, Harajuku or Shinjuku, these areas are convenient for the wedding and the plans we have around it.<br>We've arranged special rates at selected hotels in Tokyo and across Japan, available throughout your stay in Japan — not just for the wedding date. Please have a look below.<br>You may also find good deals on Booking.com or Agoda, so it's worth comparing options.", buttonLabel:"See hotel options with special rates", buttonUrl:HOTEL_URL},
+        {q:"Where should I stay?", a:"We recommend staying around Shibuya, Harajuku or Shinjuku, these areas are convenient for the wedding and the plans we have around it.<br>We've arranged special rates at selected hotels in Tokyo and across Japan, available throughout your stay in Japan.<br>You may also find good deals on Booking.com or Agoda, so it's worth comparing options.", buttonLabel:"See hotel options with special rates", buttonUrl:HOTEL_URL},
         {q:"Is there parking?", a:"Neither venues have dedicated parking. If you need information regarding nearby parking options, feel free to contact us."},
         {q:"Who do I contact with questions?", a:"Please reach out to us at <b>muroga.wedding@gmail.com</b> for any wedding-related questions."}
       ]
@@ -617,7 +616,7 @@ const CONTENT = {
     hero: { eyebrow:"結婚式のご案内", names:"悠 & ソフィア", date:"2027年5月15日 · 東京, 日本", scroll:"スクロール" },
     message: {
       title:"ご挨拶",
-      text:"このたび、私たちは結婚式を挙げることとなりました\n\nこれまでお世話になった皆さまへ感謝を込めて、ささやかではありますが、結婚式と披露宴を開きます\n\n当日は皆さまと一緒に、楽しい時間を過ごせたら嬉しいです。お会いできることを楽しみにしています\n\n悠（アンデレ） & ソフィア"
+      text:"このたび、私たちは結婚式を挙げることとなりました\n\nこれまでお世話になった皆さまへ感謝を込めて、ささやかではありますが、結婚式と披露宴を催したく存じます\n\n当日は皆さまと一緒に、楽しい時間を過ごせたら嬉しいです。お会いできることを楽しみにしています\n\n悠（アンデレ） & ソフィア"
     },
     banner: {
       text:"12月25日までに出欠のご回答をお願いします",
@@ -625,13 +624,13 @@ const CONTENT = {
     },
     schedule: {
       title:"当日のスケジュール",
-      intro:"私たちの結婚式は、伝統的な和の趣とモダンな雰囲気が調和する東郷記念館で行います。\n\n当日は下記の時間までに会場へお越しください。",
+      intro:"私たちの結婚式は、伝統的な和の趣とモダンな雰囲気が調和する東郷記念館で行います",
       items:[
         {time:"12:00", name:"ご来館", desc:"東郷記念館<br>ご親族は11:40までにお越しください<br>ご親族以外の皆さまは12:00までにお越しください", image:"images/schedule-image-01.jpg"},
         {time:"12:20〜12:40", name:"挙式", desc:"東郷記念館・結びの庭", image:"images/schedule-image-02.jpg"},
         {time:"12:40〜13:30", name:"写真撮影・ウェルカムティー", desc:"東郷記念館・天翔バルコニー", image:"images/schedule-image-03.jpg"},
         {time:"13:30〜16:00", name:"披露宴", desc:"東郷記念館・聚洸", image:"images/schedule-image-04.jpg"},
-        {time:"16:00〜18:00", name:"休憩時間", desc:"日本庭園の散策など、周辺でご自由にお過ごしいただき、18:00の開始に合わせてアフターパーティー会場へお向かいください。会場までは徒歩約15分です。", image:"images/schedule-image-05.jpg", hideForFamily:true},
+        {time:"16:00〜18:00", name:"休憩時間", desc:"日本庭園の散策など、周辺でご自由にお過ごしいただき、18:00の開始に合わせてアフターパーティー会場へお向かいください（会場までは徒歩約15分です）", image:"images/schedule-image-05.jpg", hideForFamily:true},
         {time:"18:00〜21:00", name:"アフターパーティー", desc:"VENT Tokyo", image:"images/schedule-image-06.jpg", hideForFamily:true}
       ]
     },
@@ -651,7 +650,7 @@ const CONTENT = {
     culture: { eyebrow:"", title:"", introText:"", guideLinkLabel:"", giftTitle:"", giftText:"", paypalLabel:"", revolutLabel:"", bankLabel:"", bankText:"", paymentNote:"", dressTitle:"", dressText:"" },
     afterparty: {
       title:"アフターパーティー",
-      desc:"披露宴のあとは、VENTにて\nアフターパーティーを開催します",
+      desc:"披露宴のあとは、VENTにてアフターパーティーを開催します",
       details:"この日のためにセレクトしたDJラインナップが、夜までフロアをつなぎます",
       lineupText:"See you on the dance floor",
       lineupTitle:"ラインナップ",
@@ -670,7 +669,7 @@ const CONTENT = {
     },
     rsvp: {
       eyebrow:"12月25日までにご回答をお願いします", title:"ご出欠について",
-      nameLabel:"お名前（フルネーム・ローマ字）", attendingLabel:"挙式・披露宴に出席しますか？",
+      nameLabel:"お名前（同居のご家族はご一緒にご記入をお願いします）", attendingLabel:"挙式・披露宴に出席しますか？",
       afterpartyLabel:"アフターパーティーに出席しますか？",
       yes:"出席します", no:"欠席します",
       dietaryLabel:"食物アレルギー・食事制限（任意）",
@@ -681,10 +680,9 @@ const CONTENT = {
       title:"よくあるご質問",
       items:[
         {q:"ドレスコードはありますか？", a:"スーツやドレスなどのセミフォーマルな服装でお越しください"},
-        {q:"同伴者を連れて行ってもよいですか？", a:"会場の席数の都合上、招待状をお送りした方のみご参加いただけます<br>同伴について相談したいことがあれば、私たちまでご連絡ください"},
+        {q:"同伴者を連れて行ってもよいですか？", a:"挙式・披露宴は、会場の席数の都合上、招待状をお送りした方のみのご参加とさせていただきます<br>アフターパーティは同伴者の方もご参加いただけますので、ご希望の場合は私たちまでご連絡ください"},
         {q:"荷物を預けることはできますか？", a:"挙式会場・アフターパーティー会場ともに可能です。アフターパーティー会場はコインロッカー形式のため、小銭をご用意ください"},
-        {q:"着替えをする場所はありますか？", a:"可能です。受付にて直接ご確認ください"},
-        {q:"どこに泊まるのがおすすめですか？", a:"渋谷・原宿・新宿周辺をおすすめします。会場へのアクセスがよく、滞在中の予定にも動きやすいエリアです。<br>また、東京・日本各地の一部ホテルで特別料金をご用意しています。<br>Booking.comやAgodaの方が安い場合もあるので、あわせて比較してみてください。", buttonLabel:"ホテル一覧・特別料金を見る", buttonUrl:HOTEL_URL},
+        {q:"宿泊はどのエリアがおすすめですか？", a:"会場へのアクセスがよい渋谷・原宿・新宿周辺をおすすめします<br>一部のホテルでは特別料金もご案内していますので、下記リンクをご覧ください<br>Booking.comやAgodaの方がお得な場合もありますので、あわせてご確認ください", buttonLabel:"ホテル一覧・特別料金を見る", buttonUrl:HOTEL_URL},
         {q:"駐車場はありますか？", a:"会場専用の駐車場はございません。必要であれば近隣の駐車場をご案内いたしますので、お気軽にお問い合わせください"},
         {q:"問い合わせ先を教えてください", a:"ご質問は以下メールアドレスまでご連絡ください<br><b>muroga.wedding@gmail.com</b>"}
       ]
