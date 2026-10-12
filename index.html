@@ -506,7 +506,7 @@
 
 <script>
 /* =========================================================================
-   LINKS & CONSTANTS — edit these once, they're reused throughout the site.
+   LINKS & CONSTANTS — reused throughout the site.
    ========================================================================= */
 const VENUE_SITE_URL = "https://www.bridal-produce.co.jp/bridal/tokyo/togokinenkan/guest/";
 const VENUE_MAP_URL = "https://maps.app.goo.gl/DRh8mJ3q1pMjXLvA6?_gl=1*weadrt*_gcl_au*NDg4NjAzNjg0LjE3ODQ5MDI5NzQ.";
@@ -538,7 +538,7 @@ const CONTENT = {
       items:[
         {time:"12:00", name:"Arrival", desc:"At Togo Kinenkan.<br>Relatives: please arrive by 11:40.<br>All other guests: please arrive by 12:00.", image:"images/schedule-image-01.jpg"},
         {time:"12:20 – 12:40", name:"Ceremony", desc:"The wedding ceremony will be held at the Garden.", image:"images/schedule-image-02.jpg"},
-        {time:"12:40 – 13:30", name:"Photos, Welcome Tea & Changing", desc:"Following the ceremony, we will join at the Tenshou Balcony for welcome tea and mingle.", image:"images/schedule-image-03.jpg"},
+        {time:"12:40 – 13:30", name:"Photos & Welcome Tea", desc:"Following the ceremony, we will join at the Tenshou Balcony for welcome tea and mingle.", image:"images/schedule-image-03.jpg"},
         {time:"13:30 – 16:00", name:"Reception", desc:"The reception includes a seated course at Juko.", image:"images/schedule-image-04.jpg"},
         {time:"16:00 – 18:00", name:"Break", desc:"Enjoy a stroll through the Japanese garden or some free time in the area, then make your way to the afterparty venue for a 18:00 start. It's about a 15-minute walk away.", image:"images/schedule-image-05.jpg", hideForFamily:true},
         {time:"18:00 – 21:00", name:"Afterparty", desc:"For the afterparty, we will change venue and continue the party at VENT.", image:"images/schedule-image-06.jpg", hideForFamily:true}
@@ -694,7 +694,7 @@ const CONTENT = {
 };
 
 /* =========================================================================
-   GROUP CONFIG — the passcodes that gate the site.
+   GROUP CONFIG
    ========================================================================= */
 const GROUPS = {
   "il4681": { lang:"en", lockLanguage:true,  showCulture:true,  showAfterparty:true, showFaq:true },
@@ -702,7 +702,7 @@ const GROUPS = {
   "rt9345":     { lang:"en", lockLanguage:false, showCulture:false, showAfterparty:true, showFaq:true }
 };
 
-// >>> Paste your deployed Google Apps Script Web App URL here <<<
+// >>> Google Apps Script Web App URL <<<
 const RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbz9l69-WPNc9J3oPJCoy6G9z-0zx4dHgav_UkeHgu4mtqBUVp0dFglKsjS3QfrgWFFK/exec";
 
 let state = { group:null, lang:"en" };
@@ -758,8 +758,7 @@ function unlock(passcode, opts = {}){
     revealSite();
   };
   gateVideo.addEventListener('ended', doReveal, { once:true });
-  // Safety net: if the video can't play for any reason (format, autoplay block, slow network),
-  // never leave a guest stuck on the gate.
+  // Safety net: if the video can't play for any reason: format, autoplay block, slow network etc
   fallbackTimer = setTimeout(doReveal, 4000);
   const playPromise = gateVideo.play();
   if(playPromise && typeof playPromise.catch === 'function'){
