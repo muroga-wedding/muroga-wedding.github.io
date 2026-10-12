@@ -806,7 +806,7 @@ function render(){
     const imageBlock = item.image
       ? `<div class="t-image img-placeholder">[${item.name} photo]<img src="${item.image}" alt="${item.name}" onerror="this.remove()"></div>`
       : '';
-    li.innerHTML = `<div class="t-index">0${i+1}</div>
+    li.innerHTML = `<div class="t-index">${i+1}</div>
       <div><div class="t-time">${item.time}</div><h3 class="t-name">${item.name}</h3><p class="t-desc">${item.desc}</p>${imageBlock}</div>`;
     tl.appendChild(li);
   });
